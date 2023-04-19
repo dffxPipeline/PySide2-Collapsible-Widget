@@ -1,7 +1,13 @@
-from PySide2 import QtWidgets, QtGui
-
-
-class Header(QtWidgets.QWidget):
+import sys 
+if sys.version_info.major == 2:
+    from PySide.QtGui import *
+    from PySide.QtCore import *
+    
+if sys.version_info.major == 3:    
+    from PySide2.QtWidgets import *
+    from PySide2.QtGui import *
+    from PySide2.QtCore import *
+class Header(QWidget):
     """Header class for collapsible group"""
 
     def __init__(self, name, content_widget):
@@ -13,34 +19,34 @@ class Header(QtWidgets.QWidget):
         """
         super(Header, self).__init__()
         self.content = content_widget
-        self.expand_ico = QtGui.QPixmap(":teDownArrow.png")
-        self.collapse_ico = QtGui.QPixmap(":teRightArrow.png")
-        self.setSizePolicy(QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Fixed)
+        self.expand_ico = QPixmap(":teDownArrow.png")
+        self.collapse_ico = QPixmap(":teRightArrow.png")
+        self.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Fixed)
 
-        stacked = QtWidgets.QStackedLayout(self)
-        stacked.setStackingMode(QtWidgets.QStackedLayout.StackAll)
-        background = QtWidgets.QLabel()
-        background.setStyleSheet("QLabel{ background-color: rgb(93, 93, 93); border-radius:2px}")
+        stacked = QStackedLayout(self)
+        stacked.setStackingMode(QStackedLayout.StackAll)
+        self.background = QLabel()
+        self.background.setStyleSheet("QLabel{ background-color: rgb(93, 93, 93); border-radius:2px}")
 
-        widget = QtWidgets.QWidget()
-        layout = QtWidgets.QHBoxLayout(widget)
+        self.widget = QWidget()
+        self.layout = QHBoxLayout(self.widget)
 
-        self.icon = QtWidgets.QLabel()
+        self.icon = QLabel()
         self.icon.setPixmap(self.expand_ico)
-        layout.addWidget(self.icon)
-        layout.setContentsMargins(11, 0, 11, 0)
+        self.layout.addWidget(self.icon)
+        self.layout.setContentsMargins(11, 0, 11, 0)
 
-        font = QtGui.QFont()
+        font = QFont()
         font.setBold(True)
-        label = QtWidgets.QLabel(name)
-        label.setFont(font)
+        self.label = QLabel(name)
+        self.label.setFont(font)
 
-        layout.addWidget(label)
-        layout.addItem(QtWidgets.QSpacerItem(0, 0, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Expanding))
+        self.layout.addWidget(self.label)
+        self.layout.addItem(QSpacerItem(0, 0, QSizePolicy.Expanding, QSizePolicy.Expanding))
 
-        stacked.addWidget(widget)
-        stacked.addWidget(background)
-        background.setMinimumHeight(layout.sizeHint().height() * 1.5)
+        stacked.addWidget(self.widget)
+        stacked.addWidget(self.background)
+        self.background.setMinimumHeight(self.layout.sizeHint().height() * 1.5)
 
     def mousePressEvent(self, *args):
         """Handle mouse events, call the function to toggle groups"""
@@ -55,7 +61,7 @@ class Header(QtWidgets.QWidget):
         self.icon.setPixmap(self.collapse_ico)
 
 
-class Container(QtWidgets.QWidget):
+class Container(QWidget):
     """Class for creating a collapsible group similar to how it is implement in Maya
 
         Examples:
@@ -75,20 +81,20 @@ class Container(QtWidgets.QWidget):
             color_background (bool): whether or not to color the background lighter like in maya
         """
         super(Container, self).__init__()
-        layout = QtWidgets.QVBoxLayout(self)
+        layout = QVBoxLayout(self)
         layout.setContentsMargins(0, 0, 0, 0)
-        self._content_widget = QtWidgets.QWidget()
+        self._content_widget = QWidget()
         if color_background:
             self._content_widget.setStyleSheet(".QWidget{background-color: rgb(73, 73, 73); "
                                                "margin-left: 2px; margin-right: 2px}")
-        header = Header(name, self._content_widget)
-        layout.addWidget(header)
+        self.header = Header(name, self._content_widget)
+        layout.addWidget(self.header)
         layout.addWidget(self._content_widget)
 
         # assign header methods to instance attributes so they can be called outside of this class
-        self.collapse = header.collapse
-        self.expand = header.expand
-        self.toggle = header.mousePressEvent
+        self.collapse = self.header.collapse
+        self.expand = self.header.expand
+        self.toggle = self.header.mousePressEvent
 
     @property
     def contentWidget(self):
