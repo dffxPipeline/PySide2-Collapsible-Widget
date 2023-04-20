@@ -62,16 +62,6 @@ class Header(QWidget):
         self.content.setVisible(False)
         self.icon.setPixmap(self.collapse_ico)
 
-    # def updateSize(self):
-    #     left, top, right, bottom, = self.content.getContentsMargins()
-    #     hint = self.content.sizeHint()
-    #     print (hint)
-    #     self.main_scroll.setMaximumHeight(int((hint.height() + top + bottom + 1) * 1.5))
-    #     self.main_scroll.setMinimumHeight(int((hint.height() + top + bottom + 1) * 1.5))
-    #     self.main_scroll.setMinimumWidth(int((hint.width() + left + right) * 2))
-    #     self.main_scroll.setMaximumWidth(int((hint.width() + left + right) * 2))
-    #     #print ("setMaximumHeight: %s\n" % (str(hint.height() + top + bottom + 1)))
-
 class Container(QWidget):
     """Class for creating a collapsible group similar to how it is implement in Maya
 
